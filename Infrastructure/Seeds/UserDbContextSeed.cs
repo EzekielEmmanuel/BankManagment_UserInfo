@@ -1,4 +1,4 @@
-﻿using Infrastructure.EF.Models;
+﻿using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Seeds;
@@ -12,7 +12,7 @@ public class UserDbContextSeed
         {
             new("Administrator"),
             new("Teller"),
-            new("User")
+            new("Customer")
         };
 
         if (!roleManager.Roles.Any())

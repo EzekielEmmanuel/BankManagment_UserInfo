@@ -1,9 +1,10 @@
 ﻿using System.Security.Claims;
+using Application.Common.Identity;
 using Microsoft.AspNetCore.Http;
 
-namespace Infrastructure.Services;
+namespace Infrastructure.EF.Identity;
 
-public class CurrentUserService
+public class CurrentUserService : ICurrentUserService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
 
