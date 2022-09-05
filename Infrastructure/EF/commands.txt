@@ -1,0 +1,1 @@
+﻿dotnet ef migrations add "initialSetup" -c UserDbContext  --startup-project ..\WebUI\ -o .\EF\Migrations\
