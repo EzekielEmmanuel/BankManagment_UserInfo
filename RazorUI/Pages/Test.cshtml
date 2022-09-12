@@ -1,0 +1,26 @@
+﻿@page
+@model RazorUI.Pages.Test
+
+@{
+    ViewData["Title"] = "Test page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Page to test stuff</h1>
+
+    <form method="post" asp-page-handler="TestButton">
+        <button type="submit" class="btn btn-primary" style="width: 150px;">Test Button</button>
+    </form>
+    <form method="post" asp-page-handler="CustomerLogin">
+        <button type="submit" class="btn btn-primary" style="width: 150px;">Customer Login</button>
+    </form>
+    <form method="post" asp-page-handler="TellerLogin">
+        <button type="submit" class="btn btn-primary" style="width: 150px;">Teller Login</button>
+    </form>
+    <form method="post" asp-page-handler="AdministratorLogin">
+        <button type="submit" class="btn btn-primary" style="width: 150px;">Administrator Login</button>
+    </form>
+    <form method="post" asp-page-handler="Logout">
+        <button type="submit" class="btn btn-primary" style="width: 150px;">Logout</button>
+    </form>
+</div>
