@@ -1,3 +1,9 @@
+using Infrastructure.EF.Contexts;
+using Infrastructure.Identity;
+using Infrastructure.Seeds;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
 namespace RazorUI;
 
 public class Program
@@ -9,22 +15,18 @@ public class Program
         {
             var services = scope.ServiceProvider;
 
-            // var userContext = services.GetRequiredService<UserDbContext>();
-            // userContext.Database.Migrate();
+            var userContext = services.GetRequiredService<UserDbContext>();
+            userContext.Database.Migrate();
 
             // When the context is set up
             // var dataContext = services.GetRequiredService<DataDbContext>();
             // userContext.Database.Migrate();
 
             //Initialize Users and Roles
-            // var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-            // var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-            //
-            // await UserDbContextSeed.SeedDefaultUserAsync(userManager, roleManager);
-            //
-            // var authService = services.GetRequiredService<IAuthService>();
-            // var result = await authService.Login(new UserLoginDto(){Email = "Customer@mail.com", Password = "Customer@123"});
-            // Console.WriteLine(result.Succeeded);
+            var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+            var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+            await UserDbContextSeed.SeedDefaultUserAsync(userManager, roleManager);
         }
 
         await host.RunAsync();
@@ -36,30 +38,3 @@ public class Program
             .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
     }
 }
-
-
-// var builder = WebApplication.CreateBuilder(args);
-//
-// // Add services to the container.
-// builder.Services.AddRazorPages();
-//
-// var app = builder.Build();
-//
-// // Configure the HTTP request pipeline.
-// if (!app.Environment.IsDevelopment())
-// {
-//     app.UseExceptionHandler("/Error");
-//     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-//     app.UseHsts();
-// }
-//
-// app.UseHttpsRedirection();
-// app.UseStaticFiles();
-//
-// app.UseRouting();
-//
-// app.UseAuthorization();
-//
-// app.MapRazorPages();
-//
-// app.Run();
