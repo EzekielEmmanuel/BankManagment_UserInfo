@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using Application.Common.Identity;
+using Application.Common.Services;
 using Application.UserManagment.Interfaces;
 using Infrastructure.EF.Contexts;
 using Infrastructure.Identity;
@@ -14,11 +14,16 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddDbContext<DataDbContext>(options =>
+        {
+            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+        });
+        
         services.AddDbContext<UserDbContext>(options =>
         {
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         });
-
+        
         services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<UserDbContext>()

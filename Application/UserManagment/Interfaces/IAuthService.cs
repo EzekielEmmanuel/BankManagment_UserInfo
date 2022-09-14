@@ -1,5 +1,5 @@
-﻿using Application.Common.Identity;
-using Application.Common.Models;
+﻿using Application.Common.Models;
+using Application.UserManagment.Models;
 
 namespace Application.UserManagment.Interfaces;
 

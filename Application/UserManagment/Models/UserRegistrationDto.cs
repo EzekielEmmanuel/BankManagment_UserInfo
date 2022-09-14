@@ -1,4 +1,4 @@
-﻿namespace Application.Common.Identity;
+﻿namespace Application.UserManagment.Models;
 
 public class UserRegistrationDto
 {

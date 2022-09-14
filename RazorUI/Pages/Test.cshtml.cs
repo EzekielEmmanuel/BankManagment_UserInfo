@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
-using Application.Common.Identity;
+using Application.Common.Services;
 using Application.UserManagment.Interfaces;
+using Application.UserManagment.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace RazorUI.Pages;

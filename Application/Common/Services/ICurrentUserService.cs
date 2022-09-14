@@ -1,4 +1,4 @@
-﻿namespace Application.Common.Identity;
+﻿namespace Application.Common.Services;
 
 public interface ICurrentUserService<out TUser>
 {
