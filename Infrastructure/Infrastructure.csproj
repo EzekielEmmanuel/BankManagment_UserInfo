@@ -22,7 +22,6 @@
 
     <ItemGroup>
         <Folder Include="EF\Migrations\DataContext" />
-        <Folder Include="EF\Repositories" />
         <Folder Include="Services" />
     </ItemGroup>
 </Project>

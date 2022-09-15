@@ -1,7 +1,10 @@
 ﻿using System.Security.Claims;
 using Application.Common.Services;
+using Application.Interfaces;
 using Application.UserManagment.Interfaces;
 using Infrastructure.EF.Contexts;
+using Infrastructure.EF.Models;
+using Infrastructure.EF.Repositories;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -43,6 +46,8 @@ public static class DependencyInjection
 
         services.AddScoped<ICurrentUserService<ClaimsPrincipal>, CurrentUserService>();
         services.AddScoped<IAuthService, AuthService>();
+        // services.AddScoped(typeof(ICrudRepository<,>),typeof(CrudRepository<,>));
+        // services.AddScoped(typeof(ICrudRepository<TestModel, int>), typeof(TestRepository));
 
         return services;
     }

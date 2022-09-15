@@ -9,5 +9,5 @@ public class DataDbContext : DbContext
     {
     }
     
-    // public DbSet<TestModel> TestModels { get; set; }
+    public DbSet<TestModel> TestModels { get; set; }
 }
