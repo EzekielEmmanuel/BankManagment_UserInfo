@@ -1,5 +1,4 @@
-﻿using Infrastructure.EF.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.EF.Contexts;
 
@@ -8,6 +7,6 @@ public class DataDbContext : DbContext
     public DataDbContext(DbContextOptions<DataDbContext> options) : base(options)
     {
     }
-    
+
     // public DbSet<TestModel> TestModels { get; set; }
 }
