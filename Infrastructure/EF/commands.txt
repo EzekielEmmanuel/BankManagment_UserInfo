@@ -1,1 +1,2 @@
-﻿dotnet ef migrations add "initialSetup" -c UserDbContext  --startup-project ..\WebUI\ -o .\EF\Migrations\
+﻿dotnet ef migrations add "initialSetup" -c UserDbContext  --startup-project ..\RazorUI\ -o .\EF\Migrations\UserContext
+dotnet ef migrations add "initialSetup" -c DataDbContext  --startup-project ..\RazorUI\ -o .\EF\Migrations\DataContext

@@ -8,5 +8,5 @@ public class DataDbContext : DbContext
     {
     }
 
-    // public DbSet<SuperHero> SuperHeroes { get; set; }
+    // public DbSet<TestModel> TestModels { get; set; }
 }

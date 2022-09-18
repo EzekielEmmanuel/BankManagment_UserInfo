@@ -1,0 +1,21 @@
+﻿@page
+@model RazorUI.Pages._LoginPartial
+
+@if (User.Identity.IsAuthenticated)
+{
+    <form method="post" asp-page-handler="Logout">
+        <ul>
+            <li>
+                <button type="submit">Log out</button>
+            </li>
+        </ul>
+    </form>
+}
+else
+{
+    <ul>
+        <li>
+            <a asp-page="/Account/Login">Log in</a>
+        </li>
+    </ul>
+}
