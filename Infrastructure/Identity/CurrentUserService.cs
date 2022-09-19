@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Infrastructure.Identity;
 
-public class CurrentUserService : ICurrentUserService<ClaimsPrincipal>
+public class CurrentUserService : ICurrentUserService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
 

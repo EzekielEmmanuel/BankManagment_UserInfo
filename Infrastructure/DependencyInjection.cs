@@ -8,6 +8,7 @@ using Infrastructure.EF.Repositories;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -44,8 +45,9 @@ public static class DependencyInjection
         //Set up config
         services.Configure<JwtConfig>(configuration.GetSection("JwtConfig"));
 
-        services.AddScoped<ICurrentUserService<ClaimsPrincipal>, CurrentUserService>();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped(typeof(TestRepository), typeof(TestRepository));
         // services.AddScoped(typeof(ICrudRepository<,>),typeof(CrudRepository<,>));
         // services.AddScoped(typeof(ICrudRepository<TestModel, int>), typeof(TestRepository));
 

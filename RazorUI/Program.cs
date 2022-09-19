@@ -20,7 +20,7 @@ public class Program
 
             // When the context is set up
             var dataContext = services.GetRequiredService<DataDbContext>();
-            // userContext.Database.Migrate();
+            userContext.Database.Migrate();
 
             //Initialize Users and Roles
             var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();

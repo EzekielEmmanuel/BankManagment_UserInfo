@@ -2,10 +2,8 @@
 
 namespace Infrastructure.EF.Models;
 
-public class TestModel
+public class TestModel : Entity
 {
-    [Key]
-    public int Id { get; set; }
     public string name { get; set; }
     public int value { get; set; }
 }

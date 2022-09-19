@@ -1,4 +1,6 @@
-﻿using Application.Common.Models;
+﻿using System.Security.Claims;
+using Application.Common.Models;
+using Application.Common.Services;
 using Application.Interfaces;
 using Infrastructure.EF.Contexts;
 using Infrastructure.EF.Models;
@@ -7,14 +9,17 @@ using Microsoft.EntityFrameworkCore;
 namespace Infrastructure.EF.Repositories;
 
 public abstract class CrudRepository<TModel,TId>: ICrudRepository<TModel,TId> 
-    where TModel : class
+    where TModel : Entity
+    where TId : notnull
 {
     private readonly DataDbContext _context;
     private readonly DbSet<TModel> _dbSet;
-    protected CrudRepository(DataDbContext context, DbSet<TModel> dbSet)
+    private readonly ICurrentUserService _currentUserService;
+    protected CrudRepository(DataDbContext context, DbSet<TModel> dbSet, ICurrentUserService currentUserService)
     {
         _context = context;
         _dbSet = dbSet;
+        _currentUserService = currentUserService;
     }
     public async Task<Result<TModel>> GetById(TId id)
     {
@@ -26,6 +31,12 @@ public abstract class CrudRepository<TModel,TId>: ICrudRepository<TModel,TId>
         return Result<TModel>.Success(item);
     }
 
+    public async Task<Result<IEnumerable<TModel>>> GetAll()
+    {
+        var items = await _dbSet.AsQueryable().ToArrayAsync();
+        return Result<TModel>.Success(items.AsEnumerable());
+    }
+
     public async Task<Result<IEnumerable<TModel>>> Get(Func<TModel,bool> filter)
     {
 
@@ -33,9 +44,13 @@ public abstract class CrudRepository<TModel,TId>: ICrudRepository<TModel,TId>
         return Result<TModel>.Success(items.AsEnumerable());
     }
 
-    public async Task<Result> Insert(TModel data)
+    public async Task<Result> Insert(TModel item)
     {
-        await _dbSet.AddAsync(data);
+        var userId = _currentUserService.UserId;
+        item.MetaAddedUser = userId;
+        item.MetaAddedDate = DateTimeOffset.UtcNow;
+        
+        await _dbSet.AddAsync(item);
         try
         {
             await _context.SaveChangesAsync();
@@ -49,6 +64,10 @@ public abstract class CrudRepository<TModel,TId>: ICrudRepository<TModel,TId>
 
     public async Task<Result> Update(TModel item)
     {
+        var userId = _currentUserService.UserId;
+        item.MetaModifiedUser = userId;
+        item.MetaModifiedDate = DateTimeOffset.UtcNow;
+        
         _dbSet.Update(item);
         try
         {
