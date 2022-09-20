@@ -2,15 +2,28 @@
 
 public class Result
 {
-    internal Result(bool succeeded, IEnumerable<string> errors)
+    protected Result(bool succeeded, IEnumerable<string> errors)
     {
         Succeeded = succeeded;
         Errors = errors.ToArray();
     }
 
-    public bool Succeeded { get; init; }
+    protected bool Succeeded { get; }
 
-    public string[] Errors { get; init; }
+    protected string[] Errors { get; }
+
+    public TReturn Match<TReturn>(Func<TReturn> success, Func<string[], TReturn> fail)
+    {
+        return Succeeded ? success() : fail(Errors);
+    }
+
+    public void Match(Action success, Action<string[]> fail)
+    {
+        if (Succeeded)
+            success();
+        else
+            fail(Errors);
+    }
 
     public static Result Success()
     {
@@ -38,20 +51,34 @@ public class Result
     }
 }
 
-public class Result<TValue> : Result
+public sealed class Result<TValue> : Result
 {
-    internal Result(bool succeeded, IEnumerable<string> errors) : base(succeeded, errors)
+    private Result(bool succeeded, IEnumerable<string> errors) : base(succeeded, errors)
     {
+        Value = default!;
     }
 
-    internal Result(TValue value, bool succeeded, IEnumerable<string> errors) : this(succeeded, errors)
+    private Result(TValue value, bool succeeded, IEnumerable<string> errors) : this(succeeded, errors)
     {
         Value = value;
     }
 
-    public TValue? Value { get; init; }
+    private TValue Value { get; }
 
-    public static Result<TValue> Success<TValue>(TValue value)
+    public TReturn Match<TReturn>(Func<TValue, TReturn> success, Func<string[], TReturn> fail)
+    {
+        return Succeeded ? success(Value) : fail(Errors);
+    }
+
+    public void Match(Action<TValue> success, Action<string[]> fail)
+    {
+        if (Succeeded)
+            success(Value);
+        else
+            fail(Errors);
+    }
+
+    public static Result<TValue> Success(TValue value)
     {
         return new Result<TValue>(value, true, Array.Empty<string>());
     }

@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-using Application.Common.Services;
-using Application.Interfaces;
+﻿using Application.Common.Services;
 using Application.UserManagment.Interfaces;
 using Application.UserManagment.Models;
 using Infrastructure.EF.Models;
@@ -29,38 +27,36 @@ public class Test : PageModel
     public async Task OnPostDataTestButton()
     {
         // var id = _currentUserService.UserId;
-        TestModel item = new TestModel()
+        var item = new TestModel
         {
             name = "name1",
             value = 100
         };
-        
-        var result1 = await _repository.Insert(item);
-        
-        var result2 = await _repository.GetAll();
-        var items = new TestModel[]{};
-        if (result2.Succeeded)
-        {
-            items = result2.Value.ToArray();
-        }
 
-        TestModel newItem = new TestModel(){
+        var result1 = await _repository.Insert(item);
+
+        var result2 = await _repository.GetAll();
+        var items = new TestModel[] { };
+        result2.Match(value => { items = value.ToArray(); }, errors => { });
+
+        var newItem = new TestModel
+        {
             name = "name1",
             value = 100
         };
         var result3 = await _repository.GetById(items.Last().Id);
-        if (result3.Succeeded)
+        result3.Match(value =>
         {
-            newItem = result3.Value;
+            newItem = value;
             newItem.name = "updated name";
-        }
+        }, errors => { });
 
         var result4 = await _repository.Update(newItem);
         var result5 = await _repository.GetById(newItem.Id);
-        if (result5.Succeeded)
+        result5.Match(value =>
         {
-            var name = result5.Value.name;
-        }
+            var name = value.name;
+        }, errors => { });
 
         var result6 = await _repository.Delete(newItem);
         var result7 = await _repository.GetById(newItem.Id);
