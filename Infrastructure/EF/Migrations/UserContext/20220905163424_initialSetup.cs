@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Infrastructure.EF.Migrations;
+namespace Infrastructure.EF.Migrations.UserContext;
 
 public partial class initialSetup : Migration
 {

@@ -1,4 +1,4 @@
-﻿using Infrastructure.EF.Models;
+﻿using Infrastructure.BankAccounts.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.EF.Contexts;

@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Infrastructure.EF.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.EF.Models;
+namespace Infrastructure.BankAccounts.Models;
 
 [Index("Number", IsUnique = true)]
 public class BankAccount : Entity

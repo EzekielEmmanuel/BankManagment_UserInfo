@@ -1,4 +1,4 @@
-﻿using Application.UserManagment.Interfaces;
+﻿using Application.Users.Interfaces;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace RazorUI.Pages;

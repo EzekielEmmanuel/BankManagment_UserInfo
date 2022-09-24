@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Application.UserManagment.Interfaces;
-using Application.UserManagment.Models;
+using Application.Users.Interfaces;
+using Application.Users.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 

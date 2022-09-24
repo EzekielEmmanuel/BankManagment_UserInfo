@@ -1,5 +1,5 @@
 ﻿using Application.Common.Services;
-using Application.UserManagment.Interfaces;
+using Application.Users.Interfaces;
 using Infrastructure.EF.Contexts;
 using Infrastructure.EF.Repositories;
 using Infrastructure.Identity;

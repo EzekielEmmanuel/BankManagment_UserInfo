@@ -1,8 +1,8 @@
-﻿using Application.BankManagement.Models;
-using Application.BankManagement.Repositories;
+﻿using Application.BankAccounts.Models;
+using Application.BankAccounts.Repositories;
 using Application.Common.Services;
-using Application.UserManagment.Interfaces;
-using Application.UserManagment.Models;
+using Application.Users.Interfaces;
+using Application.Users.Models;
 using Domain;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
