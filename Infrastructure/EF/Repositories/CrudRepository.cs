@@ -7,14 +7,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.EF.Repositories;
 
-public abstract class CrudRepository<TModel> : ICrudRepository<TModel, int>
+internal sealed class CrudRepository<TModel> : ICrudRepository<TModel, int>
     where TModel : Entity
 {
     private readonly DataDbContext _context;
     private readonly ICurrentUserService _currentUserService;
     private readonly DbSet<TModel> _dbSet;
 
-    protected CrudRepository(DataDbContext context, DbSet<TModel> dbSet, ICurrentUserService currentUserService)
+    public CrudRepository(DataDbContext context, DbSet<TModel> dbSet, ICurrentUserService currentUserService)
     {
         _context = context;
         _dbSet = dbSet;
@@ -58,55 +58,6 @@ public abstract class CrudRepository<TModel> : ICrudRepository<TModel, int>
         }
     }
 
-    // protected async Task<Result> Update<TOut>(TOut item, TId Id)
-    // {
-    //     var oldResult = await GetById(Id);
-    //     TModel oldItem = null;
-    //     oldResult.Match(value =>
-    //     {
-    //         oldItem = value;
-    //     }, errors =>
-    //     { });
-    //
-    //     if (oldItem != null)
-    //     {
-    //         
-    //     }
-    //
-    //     var userId = _currentUserService.UserId;
-    //     item.MetaModifiedUser = userId;
-    //     item.MetaModifiedDate = DateTimeOffset.UtcNow;
-    //
-    //     _dbSet.Update(item);
-    //     try
-    //     {
-    //         await _context.SaveChangesAsync();
-    //         return Result.Success();
-    //     }
-    //     catch (Exception e)
-    //     {
-    //         return Result.Failure("Failed to update item");
-    //     }
-    // }
-
-    // public async Task<Result> Update(TModel item)
-    // {
-    //     var userId = _currentUserService.UserId;
-    //     item.MetaModifiedUser = userId;
-    //     item.MetaModifiedDate = DateTimeOffset.UtcNow;
-    //
-    //     _dbSet.Update(item);
-    //     try
-    //     {
-    //         await _context.SaveChangesAsync();
-    //         return Result.Success();
-    //     }
-    //     catch (Exception e)
-    //     {
-    //         return Result.Failure("Failed to update item");
-    //     }
-    // }
-    //
     public async Task<Result> Update(TModel item)
     {
         var oldItem = await _dbSet.FindAsync(item.Id);
@@ -160,7 +111,7 @@ public abstract class CrudRepository<TModel> : ICrudRepository<TModel, int>
         return Result.Failure("Failed to delete item");
     }
 
-    protected async Task<Result<IEnumerable<TOut>>> Get<TOut>(Func<TOut, TModel> mapTo, Func<TModel, TOut> mapFrom,
+    public async Task<Result<IEnumerable<TOut>>> Get<TOut>(Func<TOut, TModel> mapTo, Func<TModel, TOut> mapFrom,
         Func<TOut, bool> filter)
         where TOut : class
     {
