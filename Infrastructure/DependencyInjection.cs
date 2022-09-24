@@ -1,14 +1,10 @@
-﻿using System.Security.Claims;
-using Application.Common.Services;
-using Application.Interfaces;
+﻿using Application.Common.Services;
 using Application.UserManagment.Interfaces;
 using Infrastructure.EF.Contexts;
-using Infrastructure.EF.Models;
 using Infrastructure.EF.Repositories;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,13 +17,15 @@ public static class DependencyInjection
         services.AddDbContext<DataDbContext>(options =>
         {
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+            // options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         });
-        
+
         services.AddDbContext<UserDbContext>(options =>
         {
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+            // options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         });
-        
+
         services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<UserDbContext>()
@@ -47,7 +45,10 @@ public static class DependencyInjection
 
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IAuthService, AuthService>();
-        services.AddScoped(typeof(TestRepository), typeof(TestRepository));
+
+        services.AddRepositories(configuration);
+        // services.AddScoped()
+        // services.AddScoped(typeof(TestRepository), typeof(TestRepository));
         // services.AddScoped(typeof(ICrudRepository<,>),typeof(CrudRepository<,>));
         // services.AddScoped(typeof(ICrudRepository<TestModel, int>), typeof(TestRepository));
 

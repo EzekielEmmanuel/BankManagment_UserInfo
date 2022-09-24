@@ -8,7 +8,7 @@ public class Result
         Errors = errors.ToArray();
     }
 
-    protected bool Succeeded { get; }
+    public bool Succeeded { get; }
 
     protected string[] Errors { get; }
 

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.EF.Migrations.DataContext
 {
     [DbContext(typeof(DataDbContext))]
-    [Migration("20220919220740_TempModel")]
-    partial class TempModel
+    [Migration("20220923004058_BankAccountModel")]
+    partial class BankAccountModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,7 +24,7 @@ namespace Infrastructure.EF.Migrations.DataContext
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Infrastructure.EF.Models.TestModel", b =>
+            modelBuilder.Entity("Infrastructure.EF.Models.BankAccount", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -45,16 +45,24 @@ namespace Infrastructure.EF.Migrations.DataContext
                     b.Property<string>("MetaModifiedUser")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("name")
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("value")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("TestModels");
+                    b.HasIndex("Number")
+                        .IsUnique();
+
+                    b.ToTable("BankAccounts");
                 });
 #pragma warning restore 612, 618
         }

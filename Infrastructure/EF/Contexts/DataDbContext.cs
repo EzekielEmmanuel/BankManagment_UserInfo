@@ -8,6 +8,6 @@ public class DataDbContext : DbContext
     public DataDbContext(DbContextOptions<DataDbContext> options) : base(options)
     {
     }
-    
-    public DbSet<TestModel> TestModels { get; set; }
+
+    public virtual DbSet<BankAccount> BankAccounts { get; set; }
 }

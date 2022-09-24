@@ -1,15 +1,14 @@
-﻿using Application.Common.Models;
+﻿using Application.Common.Interfaces;
+using Application.Common.Models;
 using Application.Common.Services;
-using Application.Interfaces;
 using Infrastructure.EF.Contexts;
 using Infrastructure.EF.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.EF.Repositories;
 
-public abstract class CrudRepository<TModel, TId> : ICrudRepository<TModel, TId>
+public abstract class CrudRepository<TModel> : ICrudRepository<TModel, int>
     where TModel : Entity
-    where TId : notnull
 {
     private readonly DataDbContext _context;
     private readonly ICurrentUserService _currentUserService;
@@ -22,7 +21,7 @@ public abstract class CrudRepository<TModel, TId> : ICrudRepository<TModel, TId>
         _currentUserService = currentUserService;
     }
 
-    public async Task<Result<TModel>> GetById(TId id)
+    public async Task<Result<TModel>> GetById(int id)
     {
         var item = await _dbSet.FindAsync(id);
         if (item is null) return Result<TModel>.Failure("Failed to find item with given key");
@@ -37,8 +36,8 @@ public abstract class CrudRepository<TModel, TId> : ICrudRepository<TModel, TId>
 
     public async Task<Result<IEnumerable<TModel>>> Get(Func<TModel, bool> filter)
     {
-        var items = await _dbSet.Where(filter).AsQueryable().ToArrayAsync();
-        return Result<IEnumerable<TModel>>.Success(items.AsEnumerable());
+        var items = await Task.FromResult(_dbSet.Where(filter).ToArray());
+        return Result<IEnumerable<TModel>>.Success(items);
     }
 
     public async Task<Result> Insert(TModel item)
@@ -47,7 +46,7 @@ public abstract class CrudRepository<TModel, TId> : ICrudRepository<TModel, TId>
         item.MetaAddedUser = userId;
         item.MetaAddedDate = DateTimeOffset.UtcNow;
 
-        await _dbSet.AddAsync(item);
+        _dbSet.Add(item);
         try
         {
             await _context.SaveChangesAsync();
@@ -59,35 +58,113 @@ public abstract class CrudRepository<TModel, TId> : ICrudRepository<TModel, TId>
         }
     }
 
+    // protected async Task<Result> Update<TOut>(TOut item, TId Id)
+    // {
+    //     var oldResult = await GetById(Id);
+    //     TModel oldItem = null;
+    //     oldResult.Match(value =>
+    //     {
+    //         oldItem = value;
+    //     }, errors =>
+    //     { });
+    //
+    //     if (oldItem != null)
+    //     {
+    //         
+    //     }
+    //
+    //     var userId = _currentUserService.UserId;
+    //     item.MetaModifiedUser = userId;
+    //     item.MetaModifiedDate = DateTimeOffset.UtcNow;
+    //
+    //     _dbSet.Update(item);
+    //     try
+    //     {
+    //         await _context.SaveChangesAsync();
+    //         return Result.Success();
+    //     }
+    //     catch (Exception e)
+    //     {
+    //         return Result.Failure("Failed to update item");
+    //     }
+    // }
+
+    // public async Task<Result> Update(TModel item)
+    // {
+    //     var userId = _currentUserService.UserId;
+    //     item.MetaModifiedUser = userId;
+    //     item.MetaModifiedDate = DateTimeOffset.UtcNow;
+    //
+    //     _dbSet.Update(item);
+    //     try
+    //     {
+    //         await _context.SaveChangesAsync();
+    //         return Result.Success();
+    //     }
+    //     catch (Exception e)
+    //     {
+    //         return Result.Failure("Failed to update item");
+    //     }
+    // }
+    //
     public async Task<Result> Update(TModel item)
     {
-        var userId = _currentUserService.UserId;
-        item.MetaModifiedUser = userId;
-        item.MetaModifiedDate = DateTimeOffset.UtcNow;
+        var oldItem = await _dbSet.FindAsync(item.Id);
 
-        _dbSet.Update(item);
-        try
+        if (oldItem is not null)
         {
-            await _context.SaveChangesAsync();
-            return Result.Success();
+            var metaAddedUser = oldItem.MetaAddedUser;
+            var metaAddedDate = oldItem.MetaAddedDate;
+
+            _context.Entry(oldItem).CurrentValues.SetValues(item);
+
+            var userId = _currentUserService.UserId;
+            oldItem.MetaModifiedUser = userId;
+            oldItem.MetaModifiedDate = DateTimeOffset.UtcNow;
+
+            oldItem.MetaAddedUser = metaAddedUser;
+            oldItem.MetaAddedDate = metaAddedDate;
+
+            _dbSet.Update(oldItem);
+            try
+            {
+                await _context.SaveChangesAsync();
+                return Result.Success();
+            }
+            catch (Exception e)
+            {
+                return Result.Failure("Failed to update item");
+            }
         }
-        catch (Exception e)
-        {
-            return Result.Failure("Failed to update item");
-        }
+
+        return Result.Failure("Failed to update item");
     }
 
-    public async Task<Result> Delete(TModel item)
+    public async Task<Result> Delete(int id)
     {
-        _dbSet.Remove(item);
-        try
+        var oldItem = await _dbSet.FindAsync(id);
+        if (oldItem is not null)
         {
-            await _context.SaveChangesAsync();
-            return Result.Success();
+            _dbSet.Remove(oldItem);
+            try
+            {
+                await _context.SaveChangesAsync();
+                return Result.Success();
+            }
+            catch (Exception e)
+            {
+                return Result.Failure("Failed to delete item");
+            }
         }
-        catch (Exception e)
-        {
-            return Result.Failure("Failed to delete item");
-        }
+
+        return Result.Failure("Failed to delete item");
+    }
+
+    protected async Task<Result<IEnumerable<TOut>>> Get<TOut>(Func<TOut, TModel> mapTo, Func<TModel, TOut> mapFrom,
+        Func<TOut, bool> filter)
+        where TOut : class
+    {
+        var items = await Task.FromResult(_dbSet.Select(mapFrom).Where(filter).ToArray());
+        return Result<IEnumerable<TOut>>.Success(items);
     }
 }

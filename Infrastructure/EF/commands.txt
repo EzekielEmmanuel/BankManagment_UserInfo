@@ -3,3 +3,7 @@ dotnet ef migrations add "initialSetup" -c DataDbContext  --startup-project ..\R
 
 dotnet ef database update -c UserDbContext --startup-project ..\RazorUI\
 dotnet ef database update -c DataDbContext --startup-project ..\RazorUI\
+
+dotnet ef migrations remove -c DataDbContext --startup-project ..\RazorUI\
+
+https://learn.microsoft.com/en-us/ef/core/cli/dotnet

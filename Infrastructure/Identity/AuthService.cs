@@ -43,19 +43,6 @@ public class AuthService : IAuthService
         return result.ToApplicationResult();
     }
 
-    public async Task<Result<string>> Login2(UserLoginDto user)
-    {
-        var existingUser = await _userManager.FindByEmailAsync(user.Email);
-        if (existingUser == null) return Result<string>.Failure("User doesn't exist!");
-
-        var result = await _userManager.CheckPasswordAsync(existingUser, user.Password);
-        if (!result) return Result<string>.Failure("Invalid Password!");
-
-        var token = await GenerateJwt(existingUser);
-
-        return Result<string>.Success(token);
-    }
-
     public async Task<Result> Login(UserLoginDto user)
     {
         var existingUser = await _userManager.FindByEmailAsync(user.Email);
@@ -84,6 +71,19 @@ public class AuthService : IAuthService
         await _signInManager.SignOutAsync();
 
         return Result.Success();
+    }
+
+    public async Task<Result<string>> Login2(UserLoginDto user)
+    {
+        var existingUser = await _userManager.FindByEmailAsync(user.Email);
+        if (existingUser == null) return Result<string>.Failure("User doesn't exist!");
+
+        var result = await _userManager.CheckPasswordAsync(existingUser, user.Password);
+        if (!result) return Result<string>.Failure("Invalid Password!");
+
+        var token = await GenerateJwt(existingUser);
+
+        return Result<string>.Success(token);
     }
 
     private async Task<string> GenerateJwt(ApplicationUser user)

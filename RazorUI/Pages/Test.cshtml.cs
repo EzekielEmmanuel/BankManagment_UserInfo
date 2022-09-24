@@ -1,8 +1,9 @@
-﻿using Application.Common.Services;
+﻿using Application.BankManagment.Models;
+using Application.BankManagment.Repositories;
+using Application.Common.Services;
 using Application.UserManagment.Interfaces;
 using Application.UserManagment.Models;
-using Infrastructure.EF.Models;
-using Infrastructure.EF.Repositories;
+using Domain;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace RazorUI.Pages;
@@ -11,9 +12,9 @@ public class Test : PageModel
 {
     private readonly IAuthService _authService;
     private readonly ICurrentUserService _currentUserService;
-    private readonly TestRepository _repository;
+    private readonly IBankAccountRepository _repository;
 
-    public Test(IAuthService authService, ICurrentUserService currentUserService, TestRepository repository)
+    public Test(IAuthService authService, ICurrentUserService currentUserService, IBankAccountRepository repository)
     {
         _authService = authService;
         _currentUserService = currentUserService;
@@ -27,38 +28,32 @@ public class Test : PageModel
     public async Task OnPostDataTestButton()
     {
         // var id = _currentUserService.UserId;
-        var item = new TestModel
-        {
-            name = "name1",
-            value = 100
-        };
+        var item = new BankAccountDto(0, _currentUserService.UserId, "123456", BankAccountType.Checking);
 
         var result1 = await _repository.Insert(item);
 
-        var result2 = await _repository.GetAll();
-        var items = new TestModel[] { };
+        var result2 = await _repository.Get(x => x.Number == "123456");
+        var items = new BankAccountDto[] { };
         result2.Match(value => { items = value.ToArray(); }, errors => { });
 
-        var newItem = new TestModel
-        {
-            name = "name1",
-            value = 100
-        };
+        result2 = await _repository.GetAll();
+        items = new BankAccountDto[] { };
+        result2.Match(value => { items = value.ToArray(); }, errors => { });
+
+        var newItem = new BankAccountDto(0, _currentUserService.UserId, "555555", "Checking");
         var result3 = await _repository.GetById(items.Last().Id);
-        result3.Match(value =>
-        {
-            newItem = value;
-            newItem.name = "updated name";
-        }, errors => { });
+        result3.Match(
+            value => { newItem = new BankAccountDto(value.Id, _currentUserService.UserId, "555555", "Checking"); },
+            errors => { });
 
         var result4 = await _repository.Update(newItem);
         var result5 = await _repository.GetById(newItem.Id);
         result5.Match(value =>
         {
-            var name = value.name;
+            var name = value.Number;
         }, errors => { });
 
-        var result6 = await _repository.Delete(newItem);
+        var result6 = await _repository.Delete(newItem.Id);
         var result7 = await _repository.GetById(newItem.Id);
     }
 
