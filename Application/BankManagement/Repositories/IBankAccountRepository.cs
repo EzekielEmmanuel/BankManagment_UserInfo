@@ -1,7 +1,7 @@
-﻿using Application.BankManagment.Models;
+﻿using Application.BankManagement.Models;
 using Application.Common.Interfaces;
 
-namespace Application.BankManagment.Repositories;
+namespace Application.BankManagement.Repositories;
 
 public interface IBankAccountRepository : ICrudRepository<BankAccountDto, int>
 {

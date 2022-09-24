@@ -1,5 +1,5 @@
-﻿using Application.BankManagment.Models;
-using Application.BankManagment.Repositories;
+﻿using Application.BankManagement.Models;
+using Application.BankManagement.Repositories;
 using Application.Common.Services;
 using Application.UserManagment.Interfaces;
 using Application.UserManagment.Models;

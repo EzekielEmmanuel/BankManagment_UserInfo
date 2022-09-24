@@ -1,4 +1,5 @@
-﻿using Application.BankManagment.Repositories;
+﻿using Application.BankManagement.Repositories;
+using Infrastructure.BankManagement.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

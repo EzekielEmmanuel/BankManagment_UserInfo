@@ -1,10 +1,11 @@
-﻿using Application.BankManagment.Models;
-using Application.BankManagment.Repositories;
+﻿using Application.BankManagement.Models;
+using Application.BankManagement.Repositories;
 using Application.Common.Services;
 using Infrastructure.EF.Contexts;
 using Infrastructure.EF.Models;
+using Infrastructure.EF.Repositories;
 
-namespace Infrastructure.EF.Repositories;
+namespace Infrastructure.BankManagement.Repositories;
 
 internal sealed class
     BankAccountRepository : CrudMapRepository<BankAccount, BankAccountDto>, IBankAccountRepository
