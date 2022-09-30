@@ -1,7 +1,7 @@
 ﻿using Application.Common.Models;
-using Application.UserManagment.Models;
+using Application.Users.Models;
 
-namespace Application.UserManagment.Interfaces;
+namespace Application.Users.Interfaces;
 
 public interface IAuthService
 {

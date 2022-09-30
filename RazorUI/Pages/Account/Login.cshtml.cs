@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Application.UserManagment.Interfaces;
-using Application.UserManagment.Models;
+using Application.Users.Interfaces;
+using Application.Users.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -39,13 +39,11 @@ public class Login : PageModel
         {
             var result = await _authService.Login(new UserLoginDto {Email = Input.Email, Password = Input.Password});
 
-            if (!result.Succeeded)
+            return result.Match<IActionResult>(() => { return LocalRedirect(ReturnUrl); }, errors =>
             {
                 ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                 return Page();
-            }
-
-            return LocalRedirect(ReturnUrl);
+            });
         }
 
         // Something failed. Redisplay the form.

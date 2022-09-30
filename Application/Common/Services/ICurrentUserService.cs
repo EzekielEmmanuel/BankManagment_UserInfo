@@ -1,7 +1,6 @@
 ﻿namespace Application.Common.Services;
 
-public interface ICurrentUserService<out TUser>
+public interface ICurrentUserService
 {
     string? UserId { get; }
-    TUser? User { get; }
 }

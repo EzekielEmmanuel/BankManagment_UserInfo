@@ -1,4 +1,4 @@
-﻿namespace Application.UserManagment.Models;
+﻿namespace Application.Users.Models;
 
 public class UserLoginDto
 {

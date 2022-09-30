@@ -2,8 +2,8 @@
 using System.Security.Claims;
 using System.Text;
 using Application.Common.Models;
-using Application.UserManagment.Interfaces;
-using Application.UserManagment.Models;
+using Application.Users.Interfaces;
+using Application.Users.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;

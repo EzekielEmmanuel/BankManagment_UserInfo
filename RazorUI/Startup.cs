@@ -1,6 +1,8 @@
 ﻿using System.Security.Claims;
+using Application;
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
 
 namespace RazorUI;
 
@@ -46,6 +48,7 @@ public class Startup
             options.Conventions.AllowAnonymousToFolder("/Account");
         });
 
+        services.AddApplication(Configuration);
         services.AddInfrastructure(Configuration);
     }
 

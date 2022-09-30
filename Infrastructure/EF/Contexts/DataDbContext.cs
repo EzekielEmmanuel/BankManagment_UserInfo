@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Infrastructure.BankAccounts.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.EF.Contexts;
 
@@ -8,5 +9,5 @@ public class DataDbContext : DbContext
     {
     }
 
-    // public DbSet<TestModel> TestModels { get; set; }
+    public virtual DbSet<BankAccount> BankAccounts { get; set; }
 }
