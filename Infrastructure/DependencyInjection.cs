@@ -1,8 +1,10 @@
-﻿using Application.Common.Services;
+﻿using Application;
+using Application.Common.Services;
 using Application.Users.Interfaces;
 using Infrastructure.EF.Contexts;
 using Infrastructure.EF.Repositories;
 using Infrastructure.Identity;
+using Infrastructure.Identity.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -51,6 +53,7 @@ public static class DependencyInjection
         // services.AddScoped(typeof(TestRepository), typeof(TestRepository));
         // services.AddScoped(typeof(ICrudRepository<,>),typeof(CrudRepository<,>));
         // services.AddScoped(typeof(ICrudRepository<TestModel, int>), typeof(TestRepository));
+        
 
         return services;
     }

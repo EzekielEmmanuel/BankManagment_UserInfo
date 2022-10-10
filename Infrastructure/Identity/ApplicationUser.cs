@@ -4,5 +4,11 @@ namespace Infrastructure.Identity;
 
 public class ApplicationUser : IdentityUser
 {
-    // public string ssn { get; set; }
+    public string FirstName { get; set; }
+
+    public string LastName { get; set; }
+
+    public string Ssn { get; set; }
+    public DateTimeOffset Dob { get; set; }
+    public string Address { get; set; }
 }
